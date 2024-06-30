@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+import { getPlayers } from "./loader";
+import { PartialBet, Player } from "./model";
+import { PlayerSelector } from "./components/PlayerSelector";
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [players, setPlayers] = useState<Player[]>([]);
+
+  const [bet, setBet] = useState<PartialBet>({});
+
+  // useEffect(() => console.log(bet), [bet]);
+
+
+  // Load player list on component mount
+  useEffect(() => {
+    getPlayers().then((ps) => setPlayers(ps));
+  }, []);
 
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <PlayerSelector
+          players={players}
+          selectedPlayer={bet?.player}
+          setSelectedPlayer={(p) => setBet((b) => ({ ...b, player: p }))}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
