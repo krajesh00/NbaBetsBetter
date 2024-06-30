@@ -1,6 +1,6 @@
 import { Player } from "../model";
-import { Combobox } from "./ui/Combobox";
 import { useCallback, useMemo } from "react";
+import { Combobox } from "./ui/combobox";
 
 type PlayerSelectorProps = {
   players: Player[];
