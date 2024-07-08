@@ -27,7 +27,7 @@ async def get_player_stat(player_id: int, stat: str, lookback: int):
 @app.get("/statpredict/{player_id}/{stat}/{lookback}/{threshold}/{direction}/{over}/{under}")
 async def predict_stat(player_id: int, stat: str, lookback: int, threshold: float, over: float, under: float, direction: str):
     all_logs = pd.read_csv("all_data_logs.csv")
-    player_logs = all_logs[all_logs["player_id"] == player_id]
+    all_logs = all_logs[all_logs["player_id"] == player_id]
     all_logs[stat] = pd.to_numeric(all_logs[stat], errors='coerce')
 
     # Select the most recent games
