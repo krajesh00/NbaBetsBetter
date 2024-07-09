@@ -46,8 +46,6 @@ async def predict_stat(player_id: int, stat: str, lookback: int, threshold: floa
     elif direction == "under":
         successes = (recent_games[stat] < threshold).sum()
 
-    successes = (recent_games[stat] > threshold).sum()
-
     # Calculate success rate
     success_rate = successes / lookback
 
