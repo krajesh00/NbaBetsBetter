@@ -1,0 +1,8 @@
+player = 'Nikola Jokic' 
+player_id = 203999
+stat = 'PTS' 
+threshold = '23.5'
+lookback = 50 
+direction = 'over' 
+over = 3.0
+under = 1.5
