@@ -5,6 +5,7 @@ export type Player = {
 };
 export type PartialBet = {
   player?: Player;
+  stat?: string;
   overMultiplier?: number;
   underMultiplier?: number;
   breakpoint?: number;

@@ -10,34 +10,56 @@ import { Button } from "./components/ui/button";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 function App() {
+  // Server data
   const [players, setPlayers] = useState<Player[]>([]);
+  // Load player list on component mount
+  useEffect(() => {
+    getPlayers().then((ps) => setPlayers(ps));
+  }, []);
+
+
+  // User data
   const [bet, setBet] = useState<PartialBet>({});
+  const [selectedPlayer, setSelectedPlayer] = useState<Player>();
   const [breakpoint, setBreakpoint] = useState<number>(0);
   const [selectedStat, setSelectedStat] = useState("");
 
   const [displayedStat, setDisplayedStat] = useState<StatResult>();
 
   const onSubmit = () => {
-    console.log(bet);
     // TODO: Construct, validate, and submit bet
+    if (!selectedPlayer) {
+      console.error("No player selected");
+      return;
+    }
+    if (!selectedStat) {
+      console.error("No stat selected");
+      return;
+    }
+
+    // Construct bet
+    setBet({
+      player: selectedPlayer,
+      breakpoint: breakpoint,
+      stat: selectedStat,
+    });
+
+
+    console.log(bet);
   };
 
-  // Load player list on component mount
-  useEffect(() => {
-    getPlayers().then((ps) => setPlayers(ps));
-  }, []);
 
   useEffect(() => {
-    bet.player && selectedStat && getStat(bet.player, selectedStat, 30).then(setDisplayedStat);
-  }, [bet.player, selectedStat]);
+    selectedPlayer && selectedStat && getStat(selectedPlayer, selectedStat, 30).then(setDisplayedStat);
+  }, [selectedPlayer, selectedStat]);
 
   return (
     <>
       <div>
         <PlayerSelector
           players={players}
-          selectedPlayer={bet?.player}
-          setSelectedPlayer={(p) => setBet((b) => ({ ...b, player: p }))}
+          selectedPlayer={selectedPlayer}
+          setSelectedPlayer={(p) => setSelectedPlayer(p)}
         />
       </div>
 
