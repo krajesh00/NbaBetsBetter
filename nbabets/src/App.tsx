@@ -15,6 +15,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { ResultDisplay } from "./components/ResultDisplay";
+import { Separator } from "./components/ui/separator";
 
 function App() {
   // Server data
@@ -153,6 +155,8 @@ function App() {
       </div>
 
       <Button onClick={onSubmit}>Submit</Button>
+
+      <Separator />
       <div>
         <h2>
           {displayedStat?.stat ?? "Select a player and a stat to view history"}
@@ -176,37 +180,8 @@ function App() {
           )}
         </LineChart>
       </div>
-
-      {betResult && (
-        <div>
-          <p>Mean: {betResult.mean_points.toFixed(3)}</p>
-          <b>Expected Multipliers</b>
-          <div className="grid grid-cols-2">
-            <div
-              className={
-                betResult.expected_multiplier_under >=
-                betResult.expected_multiplier_over
-                  ? "bg-green-600"
-                  : "bg-red-600"
-              }
-            >
-              <b>Under</b>
-              <p>{betResult.expected_multiplier_under.toFixed(3)}</p>
-            </div>
-            <div
-              className={
-                betResult.expected_multiplier_over >=
-                betResult.expected_multiplier_under
-                  ? "bg-green-600"
-                  : "bg-red-600"
-              }
-            >
-              <b>Over</b>
-              <p>{betResult.expected_multiplier_over.toFixed(3)}</p>
-            </div>
-          </div>
-        </div>
-      )}
+      {betResult && <p>Mean: {betResult.mean_points.toFixed(3)}</p>}
+      {betResult && <ResultDisplay data={betResult} />}
     </>
   );
 }
