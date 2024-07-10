@@ -13,10 +13,24 @@ export type PartialBet = {
   opposingTeam?: Team;
   lookbackWindow?: number;
 };
-export type BetResult = {
-  expected: number;
-  stddev: number;
+
+export type Bet = {
+  player: Player;
+  stat: string;
+  overMultiplier: number;
+  underMultiplier: number;
+  breakpoint: number;
+  playerTeam?: Team;
+  opposingTeam?: Team;
+  lookbackWindow: number;
 };
+export type BetResult = {
+  expected_multiplier_over: number;
+  expected_multiplier_under: number;
+  confidence_interval_lower: number;
+  confidence_interval_upper: number;
+  mean_points: number;
+}
 
 export type StatData = {
   label: string;
