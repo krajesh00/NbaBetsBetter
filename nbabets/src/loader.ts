@@ -1,6 +1,7 @@
 import { Player, Team, BetResult, StatResult, Bet } from "./model";
 
-const API_URL = "http://127.0.0.1:8000";
+// const API_URL = "http://127.0.0.1:8000";
+const API_URL = import.meta.env.API_URL;
 
 const default_opts: RequestInit = {
   method: "GET",
@@ -93,10 +94,4 @@ export async function getStat(
       { label: "2021-01-03", value: 2 },
     ],
   };
-}
-
-function wait(ms: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
 }
