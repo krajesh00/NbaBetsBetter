@@ -40,7 +40,7 @@ async def get_available_stats():
     return {"stats" : columns}
 
 @app.get("/statpredict/{player_id}/{stat}/{lookback}/{threshold}/{over}/{under}")
-async def predict_stat(player_id: int, stat: str, lookback: int, threshold: float, over: float, under: float, direction: str):
+async def predict_stat(player_id: int, stat: str, lookback: int, threshold: float, over: float, under: float):
     all_logs = pd.read_csv("all_data_logs.csv")
     all_logs = all_logs[all_logs["PLAYER_ID"] == player_id]
     all_logs[stat] = pd.to_numeric(all_logs[stat], errors='coerce')
@@ -73,7 +73,8 @@ async def predict_stat(player_id: int, stat: str, lookback: int, threshold: floa
         "expected_multiplier_over": expected_multiplier_over,
         "expected_multiplier_under": expected_multiplier_under,
         "confidence_interval_lower": confidence_interval[0],
-        "confidence_interval_upper": confidence_interval[1]
+        "confidence_interval_upper": confidence_interval[1],
+        "mean_points": mean_points,
     }
 
 
