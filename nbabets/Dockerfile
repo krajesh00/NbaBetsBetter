@@ -15,7 +15,7 @@ COPY . .
 
 # Build the static site with the environment variable
 ARG API_URL
-ENV API_URL=${API_URL}
+ENV VITE_API_URL=${API_URL}
 
 # Build the static site
 RUN npm run build
