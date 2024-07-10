@@ -4,7 +4,7 @@ services:
   web:
     build:
       context: ./nbabets
-      dockerfile: ./nbabets/Dockerfile
+      dockerfile: Dockerfile
       args:
         - API_URL=${API_URL}
     environment:
