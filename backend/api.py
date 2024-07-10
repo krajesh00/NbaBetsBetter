@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import json
 import pandas as pd
 from scipy import stats
@@ -6,6 +7,13 @@ from scipy.stats import norm
 import numpy as np
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
@@ -31,7 +39,7 @@ async def get_available_stats():
     columns = columns[10:]
     return {"stats" : columns}
 
-@app.get("/statpredict/{player_id}/{stat}/{lookback}/{threshold}/{direction}/{over}/{under}")
+@app.get("/statpredict/{player_id}/{stat}/{lookback}/{threshold}/{over}/{under}")
 async def predict_stat(player_id: int, stat: str, lookback: int, threshold: float, over: float, under: float, direction: str):
     all_logs = pd.read_csv("all_data_logs.csv")
     all_logs = all_logs[all_logs["PLAYER_ID"] == player_id]
@@ -41,10 +49,8 @@ async def predict_stat(player_id: int, stat: str, lookback: int, threshold: floa
     recent_games = all_logs.head(lookback)
 
     # Calculate the number of games where the player exceeded the point threshold
-    if direction == "over":
-        successes = (recent_games[stat] > threshold).sum()
-    elif direction == "under":
-        successes = (recent_games[stat] < threshold).sum()
+    
+    successes = (recent_games[stat] > threshold).sum()
 
     # Calculate success rate
     success_rate = successes / lookback
