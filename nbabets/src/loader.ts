@@ -37,7 +37,7 @@ export async function getStat(
 ): Promise<StatResult> {
   return {
     stat: stat,
-    values: [1, 2, 3],
+    data: [{ label: "2021-01-01", value: 0 }, { label: "2021-01-02", value: 1 }, { label: "2021-01-03", value: 2 }],
   };
 }
 
