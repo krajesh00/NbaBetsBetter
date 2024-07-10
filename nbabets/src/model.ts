@@ -48,7 +48,6 @@ export type StatName = {
 };
 
 export const statNames: StatName[] = [
-  { label: "WL", value: "WL" },
   { label: "MIN", value: "MIN" },
   { label: "FGM", value: "FGM" },
   { label: "FGA", value: "FGA" },

@@ -9,14 +9,12 @@ import { Combobox } from "./components/ui/combobox";
 import { Button } from "./components/ui/button";
 import {
   CartesianGrid,
-  Legend,
   Line,
   LineChart,
   ReferenceLine,
   XAxis,
   YAxis,
 } from "recharts";
-import { HelpText } from "./components/HelpText";
 
 function App() {
   // Server data
