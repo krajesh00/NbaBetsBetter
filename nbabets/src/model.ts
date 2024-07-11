@@ -24,11 +24,12 @@ export type Bet = {
   opposingTeam?: Team;
   lookbackWindow: number;
 };
+
 export type BetResult = {
   expected_multiplier_over: number;
   expected_multiplier_under: number;
-  confidence_interval_lower: number;
-  confidence_interval_upper: number;
+  confidence_over: number;
+  confidence_under: number;
   mean_points: number;
 }
 
@@ -48,7 +49,6 @@ export type StatName = {
 };
 
 export const statNames: StatName[] = [
-  { label: "WL", value: "WL" },
   { label: "MIN", value: "MIN" },
   { label: "FGM", value: "FGM" },
   { label: "FGA", value: "FGA" },

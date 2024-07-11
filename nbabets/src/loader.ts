@@ -1,45 +1,35 @@
 import { Player, Team, BetResult, StatResult, Bet } from "./model";
 
-const API_URL = "http://127.0.0.1:8000";
+// const API_URL = "http://127.0.0.1:8000";
+const API_URL = import.meta.env.VITE_API_URL;
+
+console.log("API_URL", API_URL);
+console.log("import.meta.env", import.meta.env);
 
 const default_opts: RequestInit = {
   method: "GET",
   headers: {
-    mode: "cors",
+    mode: "no-cors",
   },
 };
 
 type APIPlayerList = Record<string, string>;
 
+/**
+ *
+ * @returns List of players
+ * @throws Error if API request fails
+ */
 export async function getPlayers(): Promise<Player[]> {
   const url = `${API_URL}/players`;
 
-  try {
-    const res = await fetch(url, default_opts);
-    const apiPlayers = (await res.json()) as APIPlayerList;
-    const players = Object.entries(apiPlayers).map(([id, name]) => ({
-      id,
-      name,
-    }));
-    return players;
-  } catch (e) {
-    console.error(e);
-  }
-
-  return [
-    {
-      name: "Player 1",
-      id: "1",
-    },
-    {
-      name: "Player 2",
-      id: "2",
-    },
-    {
-      name: "Player 3",
-      id: "3",
-    },
-  ];
+  const res = await fetch(url, default_opts);
+  const apiPlayers = (await res.json()) as APIPlayerList;
+  const players = Object.entries(apiPlayers).map(([name, id]) => ({
+    id,
+    name,
+  }));
+  return players;
 }
 
 export async function getTeams(): Promise<Team[]> {
@@ -49,33 +39,24 @@ export async function getTeams(): Promise<Team[]> {
 type APIBetResult = {
   expected_multiplier_over: number;
   expected_multiplier_under: number;
-  confidence_interval_lower: number;
-  confidence_interval_upper: number;
+  confidence_over: number;
+  confidence_under: number;
+  mean_points: number;
 };
 
+/**
+ * Sends a bet to the API and returns the result
+ * @param bet Data to send about bet
+ * @returns BetResult
+ * @throws Error if API request fails
+ */
 export async function checkBet(bet: Bet): Promise<BetResult> {
-  const direction = "over";
+  const url = `${API_URL}/statpredict/${bet.player?.id}/${bet.stat}/${bet.lookbackWindow}/${bet.breakpoint}/${bet.overMultiplier}/${bet.underMultiplier}`;
 
-  const url = `${API_URL}/statpredict/${bet.player?.id}/${bet.stat}/${bet.lookbackWindow}/${bet.breakpoint}/${direction}/${bet.overMultiplier}/${bet.underMultiplier}`;
+  const res = await fetch(url, default_opts);
+  const betResult = (await res.json()) as APIBetResult;
 
-  try {
-    const res = await fetch(url, default_opts);
-    const betResult = (await res.json()) as APIBetResult;
-    // console.log(betResult);
-    // TODO: Remove default values
-    return { ...betResult, mean_points: 0 };
-    // return betResult;
-  } catch (e) {
-    console.error(e);
-  }
-
-  return {
-    expected_multiplier_over: 1,
-    expected_multiplier_under: 1,
-    confidence_interval_lower: 0,
-    confidence_interval_upper: 0,
-    mean_points: 0,
-  };
+  return betResult;
 }
 
 type APIStatResult = {
@@ -116,10 +97,4 @@ export async function getStat(
       { label: "2021-01-03", value: 2 },
     ],
   };
-}
-
-function wait(ms: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
 }
