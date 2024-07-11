@@ -74,8 +74,8 @@ function App() {
   useEffect(() => {
     selectedPlayer &&
       selectedStat &&
-      getStat(selectedPlayer, selectedStat, breakpoint).then(setDisplayedStat);
-  }, [selectedPlayer, selectedStat, breakpoint]);
+      getStat(selectedPlayer, selectedStat, lookbackWindow).then(setDisplayedStat);
+  }, [selectedPlayer, selectedStat, lookbackWindow]);
 
   useEffect(() => {
     console.log(displayedStat);
