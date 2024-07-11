@@ -39,8 +39,6 @@ export async function getTeams(): Promise<Team[]> {
 type APIBetResult = {
   expected_multiplier_over: number;
   expected_multiplier_under: number;
-  confidence_interval_lower: number;
-  confidence_interval_upper: number;
   confidence_over: number;
   confidence_under: number;
   mean_points: number;

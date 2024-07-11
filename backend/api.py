@@ -77,8 +77,6 @@ async def predict_stat(player_id: int, stat: str, lookback: int, threshold: floa
     return {
         "expected_multiplier_over": expected_multiplier_over,
         "expected_multiplier_under": expected_multiplier_under,
-        "confidence_interval_lower": confidence_interval[0],
-        "confidence_interval_upper": confidence_interval[1],
         "confidence_over": over_rate,
         "confidence_under": 1 - over_rate,
         "mean_points": mean_points,
