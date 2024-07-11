@@ -5,7 +5,9 @@ import pandas as pd
 from scipy import stats
 from scipy.stats import norm
 import numpy as np
-
+from nba_api.stats.endpoints import playergamelogs
+import os
+from datetime import date
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -95,6 +97,56 @@ async def predict_stat(player_id: int, stat: str, lookback: int, threshold: floa
         "n_games": n_games,
     }
 
+@app.get("/dataupdate")
+def dataupdate():
+    with open("latest_date.txt") as f:
+        latest_date = f.read()
+    
+    todays_date = date.today()
+    current_year = todays_date.year
+    current_month = todays_date.month
+
+    if current_month < 6:
+        season = str(current_year - 1) + "-" + str(current_year)[2:]
+    else:
+        season = str(current_year) + "-" + str(current_year + 1)[2:]
+    
+    latest_date = pd.Timestamp(latest_date)
+    next_day = latest_date + pd.Timedelta(days=1)
+    
+    formatted_date = next_day.strftime('%m/%d/%Y')
+
+    new_logs = playergamelogs.PlayerGameLogs(
+        season_nullable=season,
+        date_from_nullable = formatted_date                                                     
+    ).player_game_logs.get_data_frame()
+
+    if new_logs.shape[0] != 0:
+        all_logs = pd.read_csv("all_data_logs.csv")
+        new_logs['MATCHUP'] = new_logs.apply(replace_separator, axis=1)
+
+        new_logs['GAME_DATE'] = pd.to_datetime(new_logs['GAME_DATE'])
+
+        new_logs = new_logs.sort_values(by='GAME_DATE', ascending=False)
+
+        latest_date = new_logs['GAME_DATE'].iloc[0]
+
+        os.remove("latest_date.txt")
+
+        with open("latest_date.txt", 'w') as f:
+            f.write(str(latest_date))
+
+        all_logs = pd.concat([new_logs, all_logs])
+
+        all_logs.to_csv("all_data_logs.csv", index=False)
+    
+
+
+def replace_separator(row):
+    matchup, team = row['MATCHUP'], row['TEAM_ABBREVIATION']
+    teams = matchup.split(' vs. ') if ' vs. ' in matchup else matchup.split(' @ ')
+    other_team = teams[0] if teams[1] == team else teams[1]
+    return other_team
 
 
 
