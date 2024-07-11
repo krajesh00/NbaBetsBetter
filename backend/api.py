@@ -49,37 +49,50 @@ async def predict_stat(player_id: int, stat: str, lookback: int, threshold: floa
     recent_games = all_logs.head(lookback)
     
     n_games = len(recent_games)
+    
+    #---Bernoulli Distribution---#
 
     # Calculate the number of games where the player exceeded the point threshold
     
     n_over = (recent_games[stat] > threshold).sum()
 
     # Calculate success rate
-    over_rate = n_over / n_games
+    b_confidence_over = n_over / n_games
+    b_confidence_under = 1 - b_confidence_over
+    
+    # Calculate expected multipliers
+    b_expected_multiplier_over = b_confidence_over * over
+    b_expected_multiplier_under = b_confidence_under * under
 
+    #---Normal Distribution---#
+    
     # Calculate mean points
     mean_points = recent_games[stat].mean()
 
     # Calculate standard deviation
     std_dev_points = recent_games[stat].std()
-
-    # Calculate 95% confidence interval for the points mean
-    confidence_interval = stats.norm.interval(0.95, loc=mean_points, scale=std_dev_points / np.sqrt(threshold))
-
-    # Calculate expected multipliers
-    expected_multiplier_over = over_rate * over
-    expected_multiplier_under = (1 - over_rate) * under
     
-    probability_above_breakpoint = 1 - stats.norm.cdf(threshold, loc=mean_points, scale=std_dev_points )
+    n_confidence_under = stats.norm.cdf(threshold, loc=mean_points, scale=std_dev_points )
+    n_confidence_over = 1 - n_confidence_under
     
-    print(probability_above_breakpoint)
+    n_expected_multiplier_under = n_confidence_under * under
+    n_expected_multiplier_over = n_confidence_over * over
+    
+    
+    print(n_confidence_over)
     
     return {
-        "expected_multiplier_over": expected_multiplier_over,
-        "expected_multiplier_under": expected_multiplier_under,
-        "confidence_over": over_rate,
-        "confidence_under": 1 - over_rate,
+        "b_expected_multiplier_over": b_expected_multiplier_over,
+        "b_expected_multiplier_under": b_expected_multiplier_under,
+        "b_confidence_over": b_confidence_over,
+        "b_confidence_under": b_confidence_under,
+        "n_expected_multiplier_over": n_expected_multiplier_over,
+        "n_expected_multiplier_under": n_expected_multiplier_under,
+        "n_confidence_over": n_confidence_over,
+        "n_confidence_under": n_confidence_under,
         "mean_points": mean_points,
+        "std_dev_points": std_dev_points,
+        "n_games": n_games,
     }
 
 

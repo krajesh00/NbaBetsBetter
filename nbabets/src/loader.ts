@@ -36,13 +36,7 @@ export async function getTeams(): Promise<Team[]> {
   return [{}, {}, {}];
 }
 
-type APIBetResult = {
-  expected_multiplier_over: number;
-  expected_multiplier_under: number;
-  confidence_over: number;
-  confidence_under: number;
-  mean_points: number;
-};
+type APIBetResult = BetResult;
 
 /**
  * Sends a bet to the API and returns the result

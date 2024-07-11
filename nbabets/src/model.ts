@@ -26,12 +26,18 @@ export type Bet = {
 };
 
 export type BetResult = {
-  expected_multiplier_over: number;
-  expected_multiplier_under: number;
-  confidence_over: number;
-  confidence_under: number;
+  b_expected_multiplier_over: number;
+  b_expected_multiplier_under: number;
+  b_confidence_over: number;
+  b_confidence_under: number;
+  n_expected_multiplier_over: number;
+  n_expected_multiplier_under: number;
+  n_confidence_over: number;
+  n_confidence_under: number;
   mean_points: number;
-}
+  std_dev_points: number;
+  n_games: number;
+};
 
 export type StatData = {
   label: string;
