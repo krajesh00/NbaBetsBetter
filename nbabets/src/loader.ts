@@ -9,7 +9,7 @@ console.log("import.meta.env", import.meta.env);
 const default_opts: RequestInit = {
   method: "GET",
   headers: {
-    mode: "cors",
+    mode: "no-cors",
   },
 };
 
@@ -41,6 +41,8 @@ type APIBetResult = {
   expected_multiplier_under: number;
   confidence_interval_lower: number;
   confidence_interval_upper: number;
+  confidence_over: number;
+  confidence_under: number;
   mean_points: number;
 };
 

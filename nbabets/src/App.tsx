@@ -166,12 +166,12 @@ function App() {
             <>
               <CartesianGrid stroke="#ccc" />
               <Line type="monotone" dataKey="value" stroke="#8884d8" />
-              <ReferenceLine y={breakpoint} stroke="green" label="Breakpoint" />
+              <ReferenceLine y={breakpoint} stroke="green" label={{value: "Breakpoint: " + breakpoint, position: "insideBottomLeft"}} />
               {betResult && (
                 <ReferenceLine
                   y={betResult.mean_points}
                   stroke="red"
-                  label="Mean"
+                  label={{value: "Mean: " + betResult.mean_points.toFixed(2), position: "insideBottomRight"}}
                 />
               )}
               <XAxis dataKey="label" />
@@ -180,7 +180,6 @@ function App() {
           )}
         </LineChart>
       </div>
-      {betResult && <p>Mean: {betResult.mean_points.toFixed(3)}</p>}
       {betResult && <ResultDisplay data={betResult} />}
     </>
   );

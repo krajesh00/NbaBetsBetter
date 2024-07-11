@@ -12,6 +12,8 @@ export function ResultDisplay({ data }: { data: BetResult; }) {
         >
           <b>Under</b>
           <p>{data.expected_multiplier_under.toFixed(3)}</p>
+          <p>{(data.confidence_under * 100).toFixed(2) + "%"}</p>
+
         </div>
         <div
           className={data.expected_multiplier_over >= data.expected_multiplier_under
@@ -20,6 +22,7 @@ export function ResultDisplay({ data }: { data: BetResult; }) {
         >
           <b>Over</b>
           <p>{data.expected_multiplier_over.toFixed(3)}</p>
+          <p>{(data.confidence_over * 100).toFixed(2) + "%"}</p>
         </div>
       </div>
     </div>
