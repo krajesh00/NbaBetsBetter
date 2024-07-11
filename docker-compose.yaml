@@ -11,3 +11,10 @@ services:
       - API_URL=${API_URL:-http://127.0.0.1:8000}
     ports:
       - "80:80"
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "${API_PORT}:8000"
+    command: ["fastapi", "run", "api.py"]
