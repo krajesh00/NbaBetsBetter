@@ -10,10 +10,9 @@ cd NbaBetsBetter
 docker-compose up
 ```
 
-To keep your data up to date, you will need to have prefect installed.
+To keep your data up to date:
 Open a new terminal
 Make sure Python version 3.11 is downloaded
-You can install prefect with
 ```
 cd NbaBetsBetter
 source .venv/bin/activate
